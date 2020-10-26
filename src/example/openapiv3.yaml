@@ -1,0 +1,458 @@
+openapi: 3.0.1
+info:
+  title: Order and Pay Venue Service
+  description: Provides venue data for the order and pay applications
+  version: 1.0.1
+servers:
+- url: /
+paths:
+  /venue:
+    get:
+      summary: Returns all venues.
+      operationId: getVenues
+      parameters:
+      - $ref: '#/components/parameters/TokenParameter'
+      - in: query
+        name: name
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/VenuesResponsePayload'
+                - $ref: '#/components/schemas/TablesResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+    post:
+      summary: Creates a venue.
+      operationId: postVenue
+      parameters:
+      - $ref: '#/components/parameters/TokenParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/VenuePostRequestPayload'
+              - $ref: '#/components/schemas/TablePostRequestPayload'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+                    - ACCESS_DENIED
+      x-codegen-request-body-name: body
+  /venue/{venueId}:
+    get:
+      summary: Returns the venue for the supplied ID.
+      operationId: getVenue
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+        404:
+          description: Not found
+    put:
+      summary: Updates the venue for the supplied ID.
+      operationId: putVenue
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenuePutRequestPayload'
+        required: false
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VenueResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+                    - ACCESS_DENIED
+        404:
+          description: Not found
+
+      x-codegen-request-body-name: body
+  /venue/{venueId}/table:
+    get:
+      summary: Returns the tables for the supplied venue ID.
+      operationId: getTables
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TablesResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+    post:
+      summary: Creates a table in the venue with the supplied ID.
+      operationId: postTable
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TablePostRequestPayload'
+        required: false
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+                    - ACCESS_DENIED
+      x-codegen-request-body-name: body
+  /venue/{venueId}/table/{tableId}:
+    get:
+      summary: Gets the table for the venue with the supplied IDs.
+      operationId: getTable
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - name: tableId
+        in: path
+        description: The table Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+        404:
+          description: Not found
+    put:
+      summary: Updates the table for the venue with the supplied IDs.
+      operationId: putTable
+      parameters:
+      - name: venueId
+        in: path
+        description: The venue Id
+        required: true
+        schema:
+          type: string
+      - name: tableId
+        in: path
+        description: The table Id
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/TokenParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TablePutRequestPayload'
+        required: false
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableResponsePayload'
+        400:
+          $ref: '#/components/responses/BadRequestResponse'
+        401:
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                required:
+                - type
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - INVALID_TOKEN
+                    - ACCESS_DENIED
+        404:
+          description: Not found
+      x-codegen-request-body-name: body
+
+components:
+  responses:
+    BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequestResponsePayload'
+  parameters:
+    TokenParameter:
+      name: authorization
+      in: header
+      description: The authentication token, e.g. "Bearer <token>"
+      required: true
+      schema:
+        type: string
+  schemas:
+    BadRequestResponsePayload:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    VenuesResponsePayload:
+      required:
+      - venues
+      type: object
+      properties:
+        venues:
+          type: array
+          items:
+            $ref: '#/components/schemas/VenueResponsePayload'
+    VenueResponsePayload:
+      required:
+      - id
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1234"
+        title:
+          type: string
+          example: All bar one
+        serviceChargePercent:
+          type: string
+          example: "0.10"
+        theme:
+          $ref: '#/components/schemas/VenueThemePayload'
+    VenueThemePayload:
+      type: object
+      properties:
+        logoSrcSet:
+          type: string
+          example: image.png, image@2x.png 2x, image@3x.png 3x
+        tintColour:
+          type: string
+          example: '#888888'
+    VenuePostRequestPayload:
+      required:
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: All bar one
+        theme:
+          $ref: '#/components/schemas/VenueThemePayload'
+        serviceChargePercent:
+          type: string
+          example: "0.10"
+    VenuePutRequestPayload:
+      required:
+      - id
+      - title
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1234"
+        title:
+          type: string
+          example: All bar one
+        theme:
+          $ref: '#/components/schemas/VenueThemePayload'
+        serviceChargePercent:
+          type: string
+          example: "0.10"
+    TablesResponsePayload:
+      required:
+      - tables
+      type: object
+      properties:
+        tables:
+          type: array
+          items:
+            $ref: '#/components/schemas/TableResponsePayload'
+    TableResponsePayload:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1234"
+        name:
+          type: string
+          example: Table 53
+    TablePutRequestPayload:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1234"
+        name:
+          type: string
+          example: Table 53
+    TablePostRequestPayload:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Table 53

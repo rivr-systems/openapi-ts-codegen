@@ -1,0 +1,4 @@
+*.stories.js
+**/generated/*
+**/node_modules/*
+**/build/*

@@ -1,0 +1,34 @@
+{
+  "cSpell.words": [
+    "openapi"
+  ],
+  "autoBarrel.ignoreFilePathContainingAnyOf": ".spec,.test,.stories",
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.rulers": [80],
+  "eslint.lintTask.enable": true,
+  "eslint.validate": ["typescript"],
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/build": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.quoteStyle": "single",
+  "taskExplorer.pathToMake": "make",
+  "[json]": {
+    "editor.formatOnSave": false
+  },
+  "[yaml]": {
+    "editor.formatOnSave": false
+  }
+}
